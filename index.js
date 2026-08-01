@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -18,10 +18,21 @@ const run = async () => {
     const db = client.db("simpleCrud");
     const userCollection = db.collection("users");
 
+    //all-users
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find();
       const users = await cursor.toArray();
       res.send(users);
+    });
+
+    //single-user
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const user = await userCollection.findOne(query);
+      res.send(user);
     });
 
     console.log("You successfully connected to MongoDB!"); // সফল হলে console এ message দেখাবে
