@@ -54,6 +54,25 @@ const run = async () => {
          res.send(result);
       });
 
+      //update-user(patch)
+      app.patch('/users/:id', async (req, res) => {
+         const id = req.params.id;
+         const filter = {
+            _id: new ObjectId(id),
+         };
+         const updatedData = req.body;
+         const updateDoc = {
+            $set: {
+               name: updatedData.name,
+               email: updatedData.email,
+               roll: updatedData.roll,
+            },
+         };
+         const result = await userCollection.updateOne(filter, updateDoc);
+         console.log('data after update:', result);
+         res.send(result);
+      });
+
       console.log('You successfully connected to MongoDB!'); // সফল হলে console এ message দেখাবে
    } catch (err) {
       console.dir(err); // Error হলে পুরো object tree-style এ দেখাবে
