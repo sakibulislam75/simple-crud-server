@@ -42,6 +42,15 @@ const run = async () => {
             _id: new ObjectId(id),
          };
          const result = await userCollection.deleteOne(query);
+         console.log('data after delete:', result);
+         res.send(result);
+      });
+
+      //add-user
+      app.post('/users', async (req, res) => {
+         const newUser = req.body;
+         const result = await userCollection.insertOne(newUser);
+         console.log('data after insert:', result);
          res.send(result);
       });
 
